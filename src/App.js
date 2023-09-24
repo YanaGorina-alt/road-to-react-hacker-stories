@@ -1,14 +1,19 @@
 
 import './App.css';
 
+
+
 function App() {
 
-  const title = "React"
-
+function getTitle(title){
+  return title;
+} 
   return (
 
     <div className="App">
-      <h1>`Hello ${title} !`</h1>
+      
+      <h1>Hello {getTitle("React")}!</h1>
+      
     </div>
   );
 }
