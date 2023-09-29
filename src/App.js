@@ -18,7 +18,7 @@ const list = [
     objectID: 1,
     },
     ];
-
+// Function Declaration:
 function List (){
   return (
     <ul>
@@ -37,8 +37,8 @@ function List (){
       </ul>
   );
 }
-
-function Search (){
+// Function Expression:
+let Search = function() {
   return (
     <div>
       <label htmlFor="search">Search: </label>
@@ -47,10 +47,8 @@ function Search (){
   )
 }
 
-
-function App() {
-
-  
+// Arrow Function:
+const App =()=> {
 
   return (
 
