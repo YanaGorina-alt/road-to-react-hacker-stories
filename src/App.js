@@ -1,5 +1,6 @@
 
 import './App.css';
+import * as React from 'react';
 
 // Function Declaration:
 function List (props){
@@ -32,14 +33,20 @@ const Item = ({item}) => { // props Destructuring
 }
 // Function Expression:
 let Search = function() {
+  const [searchTerm, setSearchTerm] = React.useState('');
 
   const handleChange = (event) => {
-    console.log(event);
+    setSearchTerm(event.target.value);
+    console.log(event.target.value);
   }
   return (
     <div>
       <label htmlFor="search">Search: </label>
       <input id="search" type="text" onChange={handleChange}/>
+
+      <p>
+        Searhing for <strong>{searchTerm}</strong>
+      </p>
     </div>
   )
 }
