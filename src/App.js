@@ -32,12 +32,12 @@ const Item = ({item}) => { // props Destructuring
   )
 }
 // Function Expression:
-let Search = function() {
+let Search = function(props) {
   const [searchTerm, setSearchTerm] = React.useState('');
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
-    console.log(event.target.value);
+    props.onSearch(event);
   }
   return (
     <div>
@@ -73,12 +73,16 @@ const App =()=> {
     },
     ];
 
+  const handlSearch = (event) => {
+    console.log(event.target.value);
+  }
+
   return (
 
     <div className="App">
       
       <h1>My Haker Stories</h1>
-      <Search/>
+      <Search onSearch={handlSearch}/>
       <hr/>
       <List list={stories} title="React Ecosystem"/>
     </div>
