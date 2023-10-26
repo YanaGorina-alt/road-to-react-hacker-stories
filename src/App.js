@@ -2,6 +2,52 @@
 import './App.css';
 import * as React from 'react';
 
+
+// Arrow Function:
+const App =()=> {
+  
+  const stories = [
+    {
+      title: 'React',
+      url: 'https://reactjs.org/',
+      author: 'Jordan Walke',
+      num_comments: 3,
+      points: 4,
+      objectID: 0,
+    },
+    {
+      title: 'Redux',
+      url: 'https://redux.js.org/',
+      author: 'Dan Abramov, Andrew Clark',
+      num_comments: 2,
+      points: 5,
+      objectID: 1,
+    },
+  ];
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const handleSearch = (event) => {
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
+  }
+
+  const searchedStories = stories.filter((story) => 
+    story.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  
+
+  return (
+
+    <div className="App">
+      
+      <h1>My Haker Stories</h1>
+      <Search onSearch={handleSearch} searchTerm={searchTerm}/>
+      <hr/>
+      <List list={searchedStories} title="React Ecosystem"/>
+    </div>
+    
+  );
+}
+
+
 // Function Declaration:
 function List (props){
   const {title, list} = props; // props Destructuring
@@ -33,10 +79,9 @@ const Item = ({item}) => { // props Destructuring
 }
 // Function Expression:
 let Search = function(props) {
-  const [searchTerm, setSearchTerm] = React.useState('');
+  
 
   const handleChange = (event) => {
-    setSearchTerm(event.target.value);
     props.onSearch(event);
   }
   return (
@@ -45,49 +90,11 @@ let Search = function(props) {
       <input id="search" type="text" onChange={handleChange}/>
 
       <p>
-        Searhing for <strong>{searchTerm}</strong>
+        Searhing for <strong>{props.searchTerm}</strong>
       </p>
     </div>
   )
 }
 
-// Arrow Function:
-const App =()=> {
-
-  const stories = [
-    {
-    title: 'React',
-    url: 'https://reactjs.org/',
-    author: 'Jordan Walke',
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-    },
-    {
-    title: 'Redux',
-    url: 'https://redux.js.org/',
-    author: 'Dan Abramov, Andrew Clark',
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-    },
-    ];
-
-  const handlSearch = (event) => {
-    console.log(event.target.value);
-  }
-
-  return (
-
-    <div className="App">
-      
-      <h1>My Haker Stories</h1>
-      <Search onSearch={handlSearch}/>
-      <hr/>
-      <List list={stories} title="React Ecosystem"/>
-    </div>
-    
-  );
-}
 
 export default App;
