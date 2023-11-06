@@ -24,7 +24,18 @@ const App =()=> {
       objectID: 1,
     },
   ];
-  const [searchTerm, setSearchTerm] = React.useState('');
+
+  // Instead of using two hooks separatly we'll make a custom hook
+
+  const [searchTerm, setSearchTerm] = React.useState(
+     localStorage.getItem('search')||'React'
+     );
+
+  React.useEffect(()=>{
+    localStorage.setItem('search', searchTerm)}, [searchTerm]
+    );
+
+
   const handleSearch = (event) => {
     console.log(event.target.value);
     setSearchTerm(event.target.value);
@@ -57,17 +68,16 @@ function List (props){
       <ul>
           {list.map(function(item){
             return(
-                <Item item={item} />
+                <Item key={item.objectID} item={item} />
                 );
           })}
       </ul>
     </div>
-  );
-}
-
+  )
+ }
 const Item = ({item}) => { // props Destructuring
   return(
-    <li key={item.objectID}>
+    <li>
     <span>
       <a href={item.url}>{item.title}</a>
     </span>
@@ -87,7 +97,7 @@ let Search = function(props) {
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={handleChange}/>
+      <input id="search" type="text" value={props.searchTerm} onChange={handleChange}/>
 
       <p>
         Searhing for <strong>{props.searchTerm}</strong>
