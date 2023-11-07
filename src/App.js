@@ -27,14 +27,28 @@ const App =()=> {
 
   // Instead of using two hooks separatly we'll make a custom hook
 
-  const [searchTerm, setSearchTerm] = React.useState(
-     localStorage.getItem('search')||'React'
-     );
+  // const [searchTerm, setSearchTerm] = React.useState(
+  //    localStorage.getItem('search')||'React'
+  //    );
 
-  React.useEffect(()=>{
-    localStorage.setItem('search', searchTerm)}, [searchTerm]
-    );
+  // React.useEffect(()=>{
+  //   localStorage.setItem('search', searchTerm)}, [searchTerm]
+  //   );
 
+  const useSemiPersistentState = (key, initialState) => {
+    const [value, setValue] = React.useState(
+      localStorage.getItem(key)||initialState
+      );
+
+    React.useEffect(()=>{
+      localStorage.setItem(key, value)}, [value]
+      );
+
+      return [value, setValue]
+  }
+
+ 
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
 
   const handleSearch = (event) => {
     console.log(event.target.value);
