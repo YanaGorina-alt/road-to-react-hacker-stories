@@ -41,7 +41,7 @@ const App =()=> {
       );
 
     React.useEffect(()=>{
-      localStorage.setItem(key, value)}, [value]
+      localStorage.setItem(key, value)}, [value, key]
       );
 
       return [value, setValue]
@@ -64,12 +64,32 @@ const App =()=> {
     <div className="App">
       
       <h1>My Haker Stories</h1>
-      <Search onSearch={handleSearch} searchTerm={searchTerm}/>
+
+      <InputWithLabel 
+        id='search'
+        label="Search :"
+        value={searchTerm}
+        type="text"
+        onInputChange={handleSearch}
+      />
+    
       <hr/>
       <List list={searchedStories} title="React Ecosystem"/>
     </div>
     
   );
+}
+
+// Function Expression:
+const InputWithLabel = function({id,label,value,type,onInputChange}) {
+  
+  return (
+    <>
+      <label htmlFor={id}>{label}</label>
+      &nbsp;
+      <input id={id} type={type} value={value} onChange={onInputChange}/>
+    </>
+  )
 }
 
 
@@ -101,24 +121,7 @@ const Item = ({item}) => { // props Destructuring
     </li>
   )
 }
-// Function Expression:
-let Search = function(props) {
-  
 
-  const handleChange = (event) => {
-    props.onSearch(event);
-  }
-  return (
-    <div>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" value={props.searchTerm} onChange={handleChange}/>
-
-      <p>
-        Searhing for <strong>{props.searchTerm}</strong>
-      </p>
-    </div>
-  )
-}
 
 
 export default App;
