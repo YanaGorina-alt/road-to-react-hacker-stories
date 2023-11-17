@@ -2,28 +2,30 @@
 import './App.css';
 import * as React from 'react';
 
+const initialStories = [
+  {
+    title: 'React',
+    url: 'https://reactjs.org/',
+    author: 'Jordan Walke',
+    num_comments: 3,
+    points: 4,
+    objectID: 0,
+  },
+  {
+    title: 'Redux',
+    url: 'https://redux.js.org/',
+    author: 'Dan Abramov, Andrew Clark',
+    num_comments: 2,
+    points: 5,
+    objectID: 1,
+  },
+];
+
 
 // Arrow Function:
 const App =()=> {
   
-  const stories = [
-    {
-      title: 'React',
-      url: 'https://reactjs.org/',
-      author: 'Jordan Walke',
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
-    },
-    {
-      title: 'Redux',
-      url: 'https://redux.js.org/',
-      author: 'Dan Abramov, Andrew Clark',
-      num_comments: 2,
-      points: 5,
-      objectID: 1,
-    },
-  ];
+  
 
   // Instead of using two hooks separatly we'll make a custom hook
 
@@ -50,6 +52,16 @@ const App =()=> {
  
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
 
+  const [stories, setStories] = React.useState(initialStories);
+
+  const handleRemoveStory = item => {
+    const newStories = stories.filter(
+      story => item.objectID !== story.objectID
+      );
+
+    setStories(newStories);
+  };
+
   const handleSearch = (event) => {
     console.log(event.target.value);
     setSearchTerm(event.target.value);
@@ -67,49 +79,65 @@ const App =()=> {
 
       <InputWithLabel 
         id='search'
-        label="Search :"
         value={searchTerm}
-        type="text"
         onInputChange={handleSearch}
-      />
+        isFocused
+        children
+      >
+        
+        <strong>Search:</strong>
+        {/* children ^^^ */} 
+      </InputWithLabel>
     
       <hr/>
-      <List list={searchedStories} title="React Ecosystem"/>
+      <List list={searchedStories}  onRemoveItem = {handleRemoveStory}/>
     </div>
     
   );
 }
 
 // Function Expression:
-const InputWithLabel = function({id,label,value,type,onInputChange}) {
+const InputWithLabel = function({id,value,type='text',children,onInputChange,isFocused}) {
+
+  const inputRef = React.useRef();
+
+  React.useEffect(()=>{
+    if(isFocused) {
+      inputRef.current.focus();
+    }
+    
+  }, [isFocused]);
   
   return (
     <>
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{children}</label>
       &nbsp;
-      <input id={id} type={type} value={value} onChange={onInputChange}/>
+      <input id={id} type={type} value={value} onChange={onInputChange} ref={inputRef}/>
     </>
   )
 }
 
 
 // Function Declaration:
-function List (props){
-  const {title, list} = props; // props Destructuring
+function List ({list, onRemoveItem}){
+  
   return (
     <div>
-      <h2>{title}</h2>
+    
       <ul>
           {list.map(function(item){
             return(
-                <Item key={item.objectID} item={item} />
+                <Item
+                 key={item.objectID} 
+                 item={item}
+                 onRemoveItem = {onRemoveItem} />
                 );
           })}
       </ul>
     </div>
   )
  }
-const Item = ({item}) => { // props Destructuring
+const Item = ({item, onRemoveItem}) => { // props Destructuring
   return(
     <li>
     <span>
@@ -118,6 +146,11 @@ const Item = ({item}) => { // props Destructuring
     <span>{item.author}</span>
     <span>{item.num_comments}</span>
     <span>{item.points}</span>
+    <span>
+      <button type='button' onClick={ () => onRemoveItem(item)}>
+        Remove
+      </button>
+    </span>
     </li>
   )
 }
