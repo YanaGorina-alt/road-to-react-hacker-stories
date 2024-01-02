@@ -75,26 +75,27 @@ const App =()=> {
       isLoading: false,
     });  
   
-
-  React.useEffect(() => {
-
-    if (!searchTerm) return;
-    dispatchStories({type: 'STORIES_FETCH_INIT'});
-    
-    fetch(`${API_ENDPOINT}${searchTerm}`)
-      .then((result) => result.json())
-      .then(result => {
+    const handleFetchStories = React.useCallback(() => { 
+      if (!searchTerm) return;
+      dispatchStories({ type: 'STORIES_FETCH_INIT' });
+      fetch(`${API_ENDPOINT}${searchTerm}`)
+      .then((response) => response.json())
+      .then((result) => {
       dispatchStories({
-        type: 'STORIES_FETCH_SUCCESS',
-        payload: result.hits,
-        });
-    })
-    .catch(()=>
-     dispatchStories({type: 'STORIES_FETCH_FAILURE'})
-     );
-    }, [searchTerm]);
-
-
+      type: 'STORIES_FETCH_SUCCESS',
+      payload: result.hits,
+      });
+      })
+      .catch(() =>
+      dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
+      );
+      }, [searchTerm]);
+      
+      
+      React.useEffect(() => {
+      handleFetchStories(); 
+      }, [handleFetchStories]); 
+  
   const handleRemoveStory = item => {
     dispatchStories({
       type: 'REMOVE_STORY',
